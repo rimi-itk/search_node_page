@@ -360,6 +360,14 @@ function search_node_page_form_search_node_page_search_box_content_type_edit_for
 
           // Also add it to searchable fields.
           $fields[$field] = $vocab->name . ' (' . $field . ')';
+
+          // Add filter types ("or"/"and" for filters available).
+          $form['search_node']['filters']['type'][$field] = array(
+            '#type' => 'select',
+            '#title' => $fields[$field],
+            '#options' => array('and' => t('and'), 'or' => t('or')),
+            '#default_value' => isset($form_state['pane']->configuration['search_node']['filters']['type'][$field]) ? $form_state['pane']->configuration['search_node']['filters']['type'][$field] : 'and',
+          );
           break;
 
         case 'boolean':
@@ -604,6 +612,17 @@ function search_node_page_configuration_form($form, array &$form_state = array()
     '#default_value' => isset($defaults['options']['filters']['boolean']) ? $defaults['options']['filters']['boolean'] : array(),
   );
 
+  // This field set is empty to start with and field with options based on
+  // available filters in the alter function.
+  $form['search_node']['filters']['type'] = array(
+    '#type' => 'fieldset',
+    '#title' => t('Filters type'),
+    '#description' => t('Defines which type to use internal in a filter. Defaults to "and"'),
+    '#tree' => TRUE,
+    '#collapsible' => TRUE,
+    '#collapsed' => TRUE,
+  );
+
   $form['search_node']['sorting'] = array(
     '#type' => 'fieldset',
     '#title' => t('Sorting'),
@@ -716,8 +735,7 @@ function search_node_page_configuration_form($form, array &$form_state = array()
     '#title' => t('Search fields'),
     '#description' => t('Select the fields to highlight'),
     '#options' => $search_fields,
-    '#default_value' => isset($defaults['highlight']['fields']) ? $defaults['highlight']['fields'] : array(),
-    '#required' => TRUE,
+    '#default_value' => isset($defaults['highlight']['fields']) ? $defaults['highlight']['fields'] : array()
   );
 
   $form['search_node']['templates'] = array(
@@ -961,7 +979,7 @@ function search_node_page_build_search_box($configuration = array()) {
         $filters[] = array(
           'field' => $field,
           'name' => $vocab->name,
-          'type' => 'and',
+          'type' => isset($configuration['filters']['type'][$field]) ? $configuration['filters']['type'][$field] : 'and',
           'terms' => $terms,
         );
       }
