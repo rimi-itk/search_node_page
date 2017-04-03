@@ -109,12 +109,12 @@ function search_node_page_libraries_info() {
     'vendor url' => 'https://angularjs.org/',
     'download url' => 'https://angularjs.org/',
     'version arguments' => array(
-      'file' => 'angular.js',
+      'file' => 'angular.min.js',
       'pattern' => '/AngularJS v(\d+\.\d+.\d+)/',
       'lines' => 5,
     ),
     'files' => array(
-      'js' => array('angular.js'),
+      'js' => array('angular.min.js'),
     ),
   );
 
