@@ -225,6 +225,14 @@ function search_node_page_form_block_admin_configure_alter(&$form, &$form_state,
 
             // Also add it to searchable fields.
             $fields[$field] = $vocab->name . ' (' . $field . ')';
+
+            // Add filter types ("or"/"and" for filters available).
+            $form['settings']['search_node']['filters']['type'][$field] = array(
+              '#type' => 'select',
+              '#title' => $fields[$field],
+              '#options' => array('and' => t('and'), 'or' => t('or')),
+              '#default_value' => isset($form_state['pane']->configuration['search_node']['filters']['type'][$field]) ? $form_state['pane']->configuration['search_node']['filters']['type'][$field] : 'and',
+            );
             break;
 
           case 'boolean':
