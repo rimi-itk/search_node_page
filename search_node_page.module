@@ -995,6 +995,8 @@ function search_node_page_build_search_box($configuration = array()) {
         foreach (taxonomy_get_tree($vocab->vid) as $term) {
           $terms[$term->name] = array(
             'value' => $term->name,
+            // Pass along the actual term.
+            'term' => $term,
           );
         }
 
